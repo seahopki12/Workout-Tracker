@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 
 const PORT = process.env.PORT || 3000;
 
-// const db = require("./models");
+const db = require("./models");
 
 const app = express();
 
@@ -15,7 +15,10 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/populate", { useNewUrlParser: true });
+mongoose.connect("mongodb://localhost/workout", {
+  useNewUrlParser: true,
+  useFindAndModify: false
+});
 
 app.get("/exercise", (req, res) => {
   res.sendFile(__dirname + '/public/exercise.html', (err) => {
@@ -23,15 +26,27 @@ app.get("/exercise", (req, res) => {
   })
 });
 
-// app.post("/api/workouts", (req, res) => {
-//   db.Workout.create(req)
-//   .then(dbLibrary => {
-//     console.log(dbLibrary);
-//   })
-//   .catch(({message}) => {
-//     console.log(message);
-//   });
-// })
+app.get('/api/workouts', (req, res) => {
+  db.Workout.find({})
+  .then(data => {
+    console.log("Last workout retrieved from database");
+    res.json(data);
+  })
+  .catch(({message}) => {
+    res.json(message);
+  });
+});
+
+app.post("/api/workouts", (req, res) => {
+  db.Workout.insert(req)
+  .then(data => {
+    console.log("workout created.");
+    res.json(data);
+  })
+  .catch(({message}) => {
+    console.log(message);
+  });
+});
 
 // app.post("/submit", ({body}, res) => {
 //   db.Book.create(body)

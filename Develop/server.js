@@ -38,7 +38,7 @@ app.get('/api/workouts', (req, res) => {
 });
 
 app.post("/api/workouts", (req, res) => {
-  db.Workout.collection.insertOne(req.body)
+  db.Workout.create(req.body)
   .then(data => {
     console.log("workout created.");
     res.json(data);
@@ -48,16 +48,17 @@ app.post("/api/workouts", (req, res) => {
   });
 });
 
-// app.post("/submit", ({body}, res) => {
-//   db.Book.create(body)
-//     .then(({_id}) => db.Library.findOneAndUpdate({}, { $push: { books: _id } }, { new: true }))
-//     .then(dbLibrary => {
-//       res.json(dbLibrary);
-//     })
-//     .catch(err => {
-//       res.json(err);
-//     });
-// });
+app.put("/api/workouts/:id", (req, res) => {
+  console.log(req.body);
+  db.Workout.updateOne({_id: req.params.id}, {$push: { exercises: req.body}})
+    .then(data => {
+      console.log("exercise added");
+      res.json(data);
+    })
+    .catch(err => {
+      res.json(err);
+    });
+});
 
 // app.get("/books", (req, res) => {
 //   db.Book.find({})

@@ -25,6 +25,10 @@ mongoose.connect(
   }
 );
 
+app.get("/", function(req, res) {
+  res.json(path.join(__dirname, "public/index.html"));
+});
+
 app.get("/exercise", (req, res) => {
   res.sendFile(__dirname + '/public/exercise.html', (err) => {
     if (err) throw err;

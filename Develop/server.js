@@ -26,6 +26,12 @@ app.get("/exercise", (req, res) => {
   })
 });
 
+app.get("/stats", (req, res) => {
+  res.sendFile(__dirname + '/public/stats.html', (err) => {
+    if (err) throw err;
+  })
+});
+
 app.get('/api/workouts', (req, res) => {
   db.Workout.find({})
   .then(data => {
@@ -60,36 +66,16 @@ app.put("/api/workouts/:id", (req, res) => {
     });
 });
 
-// app.get("/books", (req, res) => {
-//   db.Book.find({})
-//     .then(dbBook => {
-//       res.json(dbBook);
-//     })
-//     .catch(err => {
-//       res.json(err);
-//     });
-// });
-
-// app.get("/library", (req, res) => {
-//   db.Library.find({})
-//     .then(dbLibrary => {
-//       res.json(dbLibrary);
-//     })
-//     .catch(err => {
-//       res.json(err);
-//     });
-// });
-
-// app.get("/populated", (req, res) => {
-//   db.Library.find({})
-//     .populate("books")
-//     .then(dbLibrary => {
-//       res.json(dbLibrary);
-//     })
-//     .catch(err => {
-//       res.json(err);
-//     });
-// });
+app.get('/api/workouts/range', (req, res) => {
+  db.Workout.find({})
+  .then(data => {
+    console.log("Data retireved for dashboard");
+    res.json(data);
+  })
+  .catch(({message}) => {
+    res.json(message);
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`App running on port ${PORT}!`);

@@ -38,7 +38,7 @@ app.get('/api/workouts', (req, res) => {
 });
 
 app.post("/api/workouts", (req, res) => {
-  db.Workout.insert(req)
+  db.Workout.collection.insertOne(req.body)
   .then(data => {
     console.log("workout created.");
     res.json(data);
